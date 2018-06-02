@@ -16,9 +16,9 @@ namespace csds
             //refer to TestSet
         }
         //right now, multiset implemented as treap doesn't yield satisfying results.
-        static void TestMultiset()
+        static void TestMultiset<T>() where T : Multiset<int>, new()
         {
-            AVLMultiset<int> set = new AVLMultiset<int>();
+            T set = new T();
 
             /* small(est) test that broke AVL
             set.Insert(2);
@@ -95,6 +95,7 @@ namespace csds
             Random rnd = new Random();
             Console.WriteLine($"Inserting {N} items...");
             var y = new System.Diagnostics.Stopwatch();
+            long tot = 0;
             y.Start();
             for(int i = 0; i < N; i++)
             {
@@ -103,8 +104,9 @@ namespace csds
                 set.Insert(a);
             }
             y.Stop();
+            tot += y.ElapsedMilliseconds;
             double time = y.ElapsedMilliseconds;
-            Console.WriteLine($"Done in {time} millisecs.");
+            Console.WriteLine($"Done in {time} ms.");
             Console.WriteLine($"Removing {N} items...");
             y = new System.Diagnostics.Stopwatch();
             y.Start();
@@ -116,7 +118,9 @@ namespace csds
             }
             y.Stop();
             time = y.ElapsedMilliseconds;
-            Console.WriteLine($"Done in {time} millisecs.");
+            tot += y.ElapsedMilliseconds;
+            Console.WriteLine($"Done in {time} ms.");
+            Console.WriteLine($"{typeof(T).ToString()} took {tot} ms.");
             //*/
 
             /* loopify
@@ -152,7 +156,8 @@ namespace csds
         {
             if(args.Length >= 1) N = M = int.Parse(args[0]);
             if(args.Length >= 2) M = int.Parse(args[1]);
-            TestMultiset();
+            TestMultiset<AVLMultiset<int>>();
+            TestMultiset<TreapMultiset<int>>();
             //TestStdSet();
         }
 

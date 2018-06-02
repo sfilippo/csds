@@ -2,25 +2,25 @@ using System;
 
 namespace csds
 {
-    //without size, about 8x slower than SortedSet. starting to hate Treaps ;)
-    public class TreapMultiset <X> where X : IComparable
+    // without size, about 8T slower than SortedSet.
+    public class TreapMultiset <T> : Multiset<T> where T : IComparable
     {
         public static Random rnd = new Random();
         public class TreapNode
         {
-            public X val;
+            public T val;
             public Int32 y = rnd.Next();
-            // public UInt32 size = 1;
+            public UInt32 size = 1;
             // public UInt32 height = 1;
             public TreapNode left = null, right = null;
-            public TreapNode (X val)
+            public TreapNode (T val)
             {
                 this.val = val;
             }
-            public void Update()
+            private void Update()
             {
                 // size = 1 + (left != null ? left.size : 0) + (right != null ? right.size : 0);
-                // height = 1 + Math.Max(left != null ? left.height : 0, right != null ? right.height : 0);
+                // height = 1 + Math.MaT(left != null ? left.height : 0, right != null ? right.height : 0);
             }
             public bool PriorityOver(TreapNode other)
             {
@@ -44,32 +44,32 @@ namespace csds
                     return other;
                 }
             }
-            public Tuple<TreapNode, TreapNode> Split(X k)
+            public Tuple<TreapNode, TreapNode> Split(T k)
             {
                 //if this needs to go left
                 if(this.val.CompareTo(k) < 0)
                 {
                     if(this.right == null) return Tuple.Create(this, (TreapNode)null);
-                    var x = this.right.Split(k);
-                    this.right = x.Item1;
+                    var T = this.right.Split(k);
+                    this.right = T.Item1;
                     this.Update();
-                    return Tuple.Create(this, x.Item2);
+                    return Tuple.Create(this, T.Item2);
                 }
                 else
                 {
                     if(this.left == null) return Tuple.Create((TreapNode)null, this);
-                    var x = this.left.Split(k);
-                    this.left = x.Item2;
+                    var T = this.left.Split(k);
+                    this.left = T.Item2;
                     this.Update();
-                    return Tuple.Create(x.Item1, this);
+                    return Tuple.Create(T.Item1, this);
                 }
             }
             public TreapNode Insert(TreapNode other)
             {
-                var x = this.Split(other.val);
-                return (x.Item1 != null ? x.Item1.Merge(other) : other).Merge(x.Item2);
+                var T = this.Split(other.val);
+                return (T.Item1 != null ? T.Item1.Merge(other) : other).Merge(T.Item2);
             }
-            public TreapNode Remove(X k)
+            public TreapNode Remove(T k)
             {
                 int comp = k.CompareTo(this.val);
                 if(comp == 0)
@@ -90,37 +90,50 @@ namespace csds
                 this.Update();
                 return this;
             }
-            public void Print()
+            public void InOrder()
             {
-                if(left != null) left.Print();
+                if(left != null) left.InOrder();
                 Console.Write(this.val + " ");
-                if(right != null) right.Print();
+                if(right != null) right.InOrder();
+            }
+            public void PreOrder()
+            {
+                Console.Write(this.val + " ");
+                if(left != null) left.PreOrder();
+                if(right != null) right.PreOrder();
             }
         }
         private TreapNode root = null;
-        public void Insert(X val)
+        public override UInt32 Size{ get => root == null ? 0 : root.size;}
+        public override void Insert(T val)
         {
             if(root == null) root = new TreapNode(val);
             else root = root.Insert(new TreapNode(val));
         }
-        public void Remove(X val)
+        public override void Remove(T val)
         {
             if(root == null) return;
             else root = root.Remove(val);
         }
-        public void Print()
+        public override void InOrder()
         {
             if(root == null)
                 Console.WriteLine("Multiset is empty.");
             else
             {
-                root.Print();
+                root.InOrder();
                 Console.WriteLine();
             }
         }
-        // public void Status()
-        // {
-        //     Console.WriteLine($"{(root != null ? root.size : 0)} / {(root != null ? root.height : 0)}");
-        // }
+        public override void PreOrder()
+        {
+            if(root == null)
+                Console.WriteLine("Multiset is empty.");
+            else
+            {
+                root.PreOrder();
+                Console.WriteLine();
+            }
+        }
     }
 }

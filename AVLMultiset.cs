@@ -2,7 +2,9 @@ using System;
 
 namespace csds
 {
-    class AVLMultiset <T> where T : IComparable
+    // With size commented, runs 5 times slower than OrderedSet
+    // Otherwise, about 6.
+    class AVLMultiset <T> : Multiset<T> where T: IComparable
     {
         public class AVLNode
         {
@@ -122,11 +124,11 @@ namespace csds
                 this.Update();
                 return this.Rebalance();
             }
-            public void Print()
+            public void InOrder()
             {
-                if(Left != null) Left.Print();
+                if(Left != null) Left.InOrder();
                 Console.Write(this.Value + " ");
-                if(Right != null) Right.Print();
+                if(Right != null) Right.InOrder();
             }
             public void PreOrder()
             {
@@ -143,7 +145,13 @@ namespace csds
             }
         }
         private AVLNode root;
-        public UInt32 Size
+
+        public AVLMultiset()
+        {
+
+        }
+
+        public override UInt32 Size
         {
             get => root != null ? root.Size : 0;
         }
@@ -151,12 +159,13 @@ namespace csds
         {
             get => (root != null ? (UInt32)root.Height : 0);
         }
-        public void Insert(T key)
+
+        public override void Insert(T key)
         {
             if(root == null) root = new AVLNode(key);
             else root = root.Insert(key);
         }
-        public void Remove(T key)
+        public override void Remove(T key)
         {
             if(root == null) return;
             root = root.Remove(key);
@@ -166,12 +175,12 @@ namespace csds
             if(root != null) return root.CheckTreeBalance();
             return true;
         }
-        public void Print()
+        public override void InOrder()
         {
-            if(root != null) root.Print();
+            if(root != null) root.InOrder();
             Console.WriteLine();
         }
-        public void PreOrder()
+        public override void PreOrder()
         {
             if(root != null) root.PreOrder();
             Console.WriteLine();
