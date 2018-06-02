@@ -86,6 +86,7 @@ namespace csds
                     return this;
                 }
                 nodes[next] = nodes[next].Insert(key);
+                this.Update();
                 return this.Rebalance();
             }
             //If you extend range query, you should rewrite this
@@ -127,11 +128,17 @@ namespace csds
                 Console.Write(this.Value + " ");
                 if(Right != null) Right.Print();
             }
-            public bool Ok()
+            public void PreOrder()
+            {
+                Console.Write(this.Value + " ");
+                if(Left != null) Left.PreOrder();
+                if(Right != null) Right.PreOrder();
+            }
+            public bool CheckTreeBalance()
             {
                 if(Math.Abs(Balance) >= 2) return false;
-                if(Left != null && Left.Ok() == false) return false;
-                if (Right != null) return Right.Ok();
+                if(Left != null && Left.CheckTreeBalance() == false) return false;
+                if (Right != null) return Right.CheckTreeBalance();
                 return true;
             }
         }
@@ -154,14 +161,19 @@ namespace csds
             if(root == null) return;
             root = root.Remove(key);
         }
-        public bool Ok()
+        public bool CheckTreeBalance()
         {
-            if(root != null) return root.Ok();
+            if(root != null) return root.CheckTreeBalance();
             return true;
         }
         public void Print()
         {
             if(root != null) root.Print();
+            Console.WriteLine();
+        }
+        public void PreOrder()
+        {
+            if(root != null) root.PreOrder();
             Console.WriteLine();
         }
     }

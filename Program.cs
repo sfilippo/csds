@@ -20,6 +20,33 @@ namespace csds
         {
             AVLMultiset<int> set = new AVLMultiset<int>();
 
+            /* small(est) test that broke AVL
+            set.Insert(2);
+            set.PreOrder();
+            set.Insert(0);
+            set.PreOrder();
+            set.Insert(6);
+            set.PreOrder();
+            set.Insert(2);
+            set.PreOrder();
+            set.Insert(3);
+            set.PreOrder();
+            set.Insert(3);
+            set.PreOrder();
+            set.Insert(2);
+            set.PreOrder();
+            set.Remove(0);
+            set.PreOrder();
+            set.Remove(0);
+            set.PreOrder();
+            set.Remove(5);
+            set.PreOrder();
+            set.Remove(6);
+            set.PreOrder();
+            set.Remove(4);
+            set.PreOrder();
+            //*/
+
             /* tests all possible insert + erase permutations
             if(N >= 7)
             {
@@ -70,19 +97,30 @@ namespace csds
             var y = new System.Diagnostics.Stopwatch();
             y.Start();
             for(int i = 0; i < N; i++)
-                set.Insert(rnd.Next() % M);
+            {
+                int a = rnd.Next() % M;
+                // Console.WriteLine($"Insert {a}");
+                set.Insert(a);
+            }
             y.Stop();
             double time = y.ElapsedMilliseconds;
             Console.WriteLine($"Done in {time} millisecs.");
             Console.WriteLine($"Removing {N} items...");
             y = new System.Diagnostics.Stopwatch();
             y.Start();
-            for(int i = 0; i < N; i++){
-                set.Remove(rnd.Next() % M);
+            for(int i = 0; i < N; i++)
+            {
+                int a = rnd.Next() % M;
+                // Console.WriteLine($"Remove {a}");
+                set.Remove(a);
             }
             y.Stop();
             time = y.ElapsedMilliseconds;
             Console.WriteLine($"Done in {time} millisecs.");
+            //*/
+
+            /* loopify
+            TestMultiset();
             //*/
         }
         static void TestArray()
