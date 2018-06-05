@@ -2,13 +2,13 @@ using System;
 
 namespace csds
 {
-    public abstract class Multiset<T> where T : IComparable
+    public interface Multiset<T> where T : IComparable
     {
-        abstract public void Insert(T key);
-        abstract public void Remove(T key);
-        abstract public UInt32 Size{get;}
-        abstract public void InOrder();
-        abstract public void PreOrder();
-        public Multiset(){}
+        void Insert(T key);
+        void Remove(T key);
+        UInt32 Size{get;}
+        UInt32 Height{get;}
+        void InOrder();
+        void PreOrder();
     }
 }

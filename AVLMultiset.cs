@@ -151,7 +151,7 @@ namespace csds
 
         }
 
-        public override UInt32 Size
+        public UInt32 Size
         {
             get => root != null ? root.Size : 0;
         }
@@ -160,12 +160,12 @@ namespace csds
             get => (root != null ? (UInt32)root.Height : 0);
         }
 
-        public override void Insert(T key)
+        public void Insert(T key)
         {
             if(root == null) root = new AVLNode(key);
             else root = root.Insert(key);
         }
-        public override void Remove(T key)
+        public void Remove(T key)
         {
             if(root == null) return;
             root = root.Remove(key);
@@ -175,12 +175,12 @@ namespace csds
             if(root != null) return root.CheckTreeBalance();
             return true;
         }
-        public override void InOrder()
+        public void InOrder()
         {
             if(root != null) root.InOrder();
             Console.WriteLine();
         }
-        public override void PreOrder()
+        public void PreOrder()
         {
             if(root != null) root.PreOrder();
             Console.WriteLine();

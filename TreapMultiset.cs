@@ -11,7 +11,7 @@ namespace csds
             public T val;
             public Int32 y = rnd.Next();
             public UInt32 size = 1;
-            // public UInt32 height = 1;
+            public UInt32 height = 1;
             public TreapNode left = null, right = null;
             public TreapNode (T val)
             {
@@ -19,8 +19,8 @@ namespace csds
             }
             private void Update()
             {
-                // size = 1 + (left != null ? left.size : 0) + (right != null ? right.size : 0);
-                // height = 1 + Math.MaT(left != null ? left.height : 0, right != null ? right.height : 0);
+                size = 1 + (left != null ? left.size : 0) + (right != null ? right.size : 0);
+                height = 1 + Math.Max(left != null ? left.height : 0, right != null ? right.height : 0);
             }
             public bool PriorityOver(TreapNode other)
             {
@@ -104,18 +104,19 @@ namespace csds
             }
         }
         private TreapNode root = null;
-        public override UInt32 Size{ get => root == null ? 0 : root.size;}
-        public override void Insert(T val)
+        public UInt32 Size{ get => root == null ? 0 : root.size;}
+        public UInt32 Height{ get => root == null ? 0 : root.height;}
+        public void Insert(T val)
         {
             if(root == null) root = new TreapNode(val);
             else root = root.Insert(new TreapNode(val));
         }
-        public override void Remove(T val)
+        public void Remove(T val)
         {
             if(root == null) return;
             else root = root.Remove(val);
         }
-        public override void InOrder()
+        public void InOrder()
         {
             if(root == null)
                 Console.WriteLine("Multiset is empty.");
@@ -125,7 +126,7 @@ namespace csds
                 Console.WriteLine();
             }
         }
-        public override void PreOrder()
+        public void PreOrder()
         {
             if(root == null)
                 Console.WriteLine("Multiset is empty.");

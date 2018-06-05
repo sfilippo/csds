@@ -15,7 +15,7 @@ namespace csds
         {
             //refer to TestSet
         }
-        //right now, multiset implemented as treap doesn't yield satisfying results.
+        //Very confused test, where AVL has similar performance to Treap
         static void TestMultiset<T>() where T : Multiset<int>, new()
         {
             T set = new T();
@@ -107,7 +107,8 @@ namespace csds
             tot += y.ElapsedMilliseconds;
             double time = y.ElapsedMilliseconds;
             Console.WriteLine($"Done in {time} ms.");
-            Console.WriteLine($"Removing {N} items...");
+            Console.WriteLine($"Tree height is {set.Height}");
+            Console.WriteLine($"Removing up to {N} items...");
             y = new System.Diagnostics.Stopwatch();
             y.Start();
             for(int i = 0; i < N; i++)
@@ -121,6 +122,7 @@ namespace csds
             tot += y.ElapsedMilliseconds;
             Console.WriteLine($"Done in {time} ms.");
             Console.WriteLine($"{typeof(T).ToString()} took {tot} ms.");
+            Console.WriteLine($"Tree height is {set.Height}");
             //*/
 
             /* loopify
