@@ -6,15 +6,89 @@ namespace csds
     class Program
     {
         static int N = (int)1e6;
-        static int M = (int)1e9;
+        static int M = (int)1e6;
         static void TestSet()
         {
             //once Multiset is implemented, pick the best implementation and adapt it
         }
-        static void TestMap()
+        static void TestPTM()
         {
-            //refer to TestSet
+            PersistentTreapMap<int, int> PTM = new PersistentTreapMap<int, int>();
+
+            //* speed check 
+            Random rnd = new Random();
+            Console.WriteLine($"Inserting {N} items...");
+            var y = new System.Diagnostics.Stopwatch();
+            long tot = 0;
+            y.Start();
+            for(int i = 0; i < N; i++)
+            {
+                int a = rnd.Next() % M;
+                int b = rnd.Next() % M;
+                // Console.WriteLine($"Insert {a}");
+                PTM = (PersistentTreapMap<int,int>)PTM.Assign(a, b);
+                //PTM.PrintInOrder();
+            }
+            y.Stop();
+            tot += y.ElapsedMilliseconds;
+            double time = y.ElapsedMilliseconds;
+            Console.WriteLine($"Done in {time} ms.");
+            Console.WriteLine($"Tree height is {PTM.Height}");
+            Console.WriteLine($"Removing up to {N} items...");
+            y = new System.Diagnostics.Stopwatch();
+            y.Start();
+            //PTM.PrintPreOrder();
+            for(int i = 0; i < N; i++)
+            {
+                int a = rnd.Next() % M;
+                // Console.WriteLine($"Remove {a}");
+                PTM = (PersistentTreapMap<int,int>)PTM.Remove(a);
+            }
+            y.Stop();
+            time = y.ElapsedMilliseconds;
+            tot += y.ElapsedMilliseconds;
+            Console.WriteLine($"Done in {time} ms.");
+            Console.WriteLine($"{typeof(PersistentTreapMap<int,int>).ToString()} took {tot} ms.");
+            Console.WriteLine($"Tree height is {PTM.Height}");
         }
+
+        static void TestStdDictionary()
+        {
+            Dictionary<int, int> dict = new Dictionary<int, int>();
+
+            //* speed check 
+            Random rnd = new Random();
+            Console.WriteLine($"Inserting {N} items...");
+            var y = new System.Diagnostics.Stopwatch();
+            long tot = 0;
+            y.Start();
+            for(int i = 0; i < N; i++)
+            {
+                int a = rnd.Next() % M;
+                int b = rnd.Next() % M;
+                // Console.WriteLine($"Insert {a}");
+                dict[a] = b;
+            }
+            y.Stop();
+            tot += y.ElapsedMilliseconds;
+            double time = y.ElapsedMilliseconds;
+            Console.WriteLine($"Done in {time} ms.");
+            Console.WriteLine($"Removing up to {N} items...");
+            y = new System.Diagnostics.Stopwatch();
+            y.Start();
+            for(int i = 0; i < N; i++)
+            {
+                int a = rnd.Next() % M;
+                // Console.WriteLine($"Remove {a}");
+                dict.Remove(a);
+            }
+            y.Stop();
+            time = y.ElapsedMilliseconds;
+            tot += y.ElapsedMilliseconds;
+            Console.WriteLine($"Done in {time} ms.");
+            Console.WriteLine($"{typeof(Dictionary<int,int>).ToString()} took {tot} ms.");
+        }
+
         //Very confused test, where AVL has similar performance to Treap
         static void TestMultiset<T>() where T : Multiset<int>, new()
         {
@@ -158,9 +232,11 @@ namespace csds
         {
             if(args.Length >= 1) N = M = int.Parse(args[0]);
             if(args.Length >= 2) M = int.Parse(args[1]);
-            TestMultiset<AVLMultiset<int>>();
-            TestMultiset<TreapMultiset<int>>();
+            //TestMultiset<AVLMultiset<int>>();
+            //TestMultiset<TreapMultiset<int>>();
             //TestStdSet();
+            TestPTM();
+            TestStdDictionary();
         }
 
         //source : https://stackoverflow.com/questions/2390954/how-would-you-calculate-all-possible-permutations-of-0-through-n-iteratively/12768718#12768718
